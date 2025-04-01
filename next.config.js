@@ -4,9 +4,7 @@ const nextConfig = {
     domains: ['avatars.githubusercontent.com'],
   },
   experimental: {
-    serverActions: {
-      allowedOrigins: ['localhost:3000', '192.168.1.249:3000'],
-    },
+    serverActions: true,
   },
   // Add allowed origins for development
   async headers() {
