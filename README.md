@@ -24,7 +24,7 @@ A modern web application for managing real estate properties, clients, documents
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/real-estate-crm.git
+   git clone https://github.com/Timothee450/real-estate-crm.git
    cd real-estate-crm
    ```
 
@@ -52,6 +52,40 @@ A modern web application for managing real estate properties, clients, documents
    ```
 
 6. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Deployment
+
+### Deploying to Vercel
+
+1. Push your code to GitHub
+2. Go to [Vercel](https://vercel.com) and sign in with your GitHub account
+3. Click "New Project"
+4. Import your repository
+5. Configure your project:
+   - Framework Preset: Next.js
+   - Build Command: `npm run build`
+   - Output Directory: `.next`
+   - Install Command: `npm install`
+6. Add your environment variables:
+   - `DATABASE_URL`: Your production database URL
+   - `JWT_SECRET`: Your JWT secret key
+7. Click "Deploy"
+
+### Database Setup
+
+For production, you'll need a PostgreSQL database. You can use:
+- [Supabase](https://supabase.com) (Recommended)
+- [Railway](https://railway.app)
+- [Neon](https://neon.tech)
+- Any other PostgreSQL provider
+
+After setting up your database:
+1. Get your database connection URL
+2. Add it to your Vercel environment variables as `DATABASE_URL`
+3. Run the database migrations:
+   ```bash
+   npx prisma db push
+   ```
 
 ## Contributing
 
