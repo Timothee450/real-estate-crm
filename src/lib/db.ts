@@ -5,62 +5,50 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
+// Export db object
 export const db = {
   query: (text: string, params?: any[]) => pool.query(text, params),
 };
 
-// Mock Prisma client for backward compatibility
-const client = {
-  findMany: async () => [],
-  findUnique: async () => null,
-  create: async () => ({}),
-  update: async () => ({}),
-  delete: async () => ({})
-};
-
-const expense = {
-  findMany: async () => [],
-  findUnique: async () => null,
-  create: async () => ({}),
-  update: async () => ({}),
-  delete: async () => ({})
-};
-
-const task = {
-  findMany: async () => [],
-  findUnique: async () => null,
-  create: async () => ({}),
-  update: async () => ({}),
-  delete: async () => ({})
-};
-
-const document = {
-  findMany: async () => [],
-  findUnique: async () => null,
-  create: async () => ({}),
-  update: async () => ({}),
-  delete: async () => ({})
-};
-
-const appointment = {
-  findMany: async () => [],
-  findUnique: async () => null,
-  create: async () => ({}),
-  update: async () => ({}),
-  delete: async () => ({})
-};
-
-const user = {
-  findUnique: async () => null,
-  create: async () => ({})
-};
-
-// Export the prisma object
+// Export prisma object with empty implementations
 export const prisma = {
-  client,
-  expense,
-  task,
-  document,
-  appointment,
-  user
+  client: {
+    findMany: async () => [],
+    findUnique: async () => null,
+    create: async () => ({}),
+    update: async () => ({}),
+    delete: async () => ({})
+  },
+  expense: {
+    findMany: async () => [],
+    findUnique: async () => null,
+    create: async () => ({}),
+    update: async () => ({}),
+    delete: async () => ({})
+  },
+  task: {
+    findMany: async () => [],
+    findUnique: async () => null,
+    create: async () => ({}),
+    update: async () => ({}),
+    delete: async () => ({})
+  },
+  document: {
+    findMany: async () => [],
+    findUnique: async () => null,
+    create: async () => ({}),
+    update: async () => ({}),
+    delete: async () => ({})
+  },
+  appointment: {
+    findMany: async () => [],
+    findUnique: async () => null,
+    create: async () => ({}),
+    update: async () => ({}),
+    delete: async () => ({})
+  },
+  user: {
+    findUnique: async () => null,
+    create: async () => ({})
+  }
 }; 
