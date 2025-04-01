@@ -1,5 +1,7 @@
 # Real Estate CRM
 
+> **Deploy Status**: Latest deployment updated on May 2, 2024.
+
 A modern web application for managing real estate properties, clients, documents, and expenses.
 
 ## Features
