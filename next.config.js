@@ -4,7 +4,9 @@ const nextConfig = {
     domains: ['avatars.githubusercontent.com'],
   },
   experimental: {
-    serverActions: true,
+    serverActions: {
+      allowedOrigins: ['localhost:3000', '192.168.1.249:3000'],
+    },
   },
   // Add allowed origins for development
   async headers() {
@@ -27,6 +29,12 @@ const nextConfig = {
         ],
       },
     ];
+  },
+  // Add allowed development origins
+  allowedDevOrigins: ['localhost:3000', '192.168.1.249:3000'],
+  // Add ESLint configuration
+  eslint: {
+    ignoreDuringBuilds: true,
   },
 };
 

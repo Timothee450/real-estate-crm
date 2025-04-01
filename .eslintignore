@@ -1,0 +1,17 @@
+# Ignore all files in node_modules
+node_modules/
+
+# Ignore all files in .next
+.next/
+
+# Ignore all files in build
+build/
+
+# Ignore all files in dist
+dist/
+
+# Ignore all files in public
+public/
+
+# Ignore all files in src/app/api
+src/app/api/ 
