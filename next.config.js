@@ -3,7 +3,6 @@ const nextConfig = {
   // Use the simplest possible config for Vercel compatibility
   output: 'standalone',
   reactStrictMode: true,
-  swcMinify: true,
   poweredByHeader: false,
   
   // Add trailing slash for better compatibility with some hosting setups
