@@ -1,8 +1,8 @@
 import { prisma } from '@/lib/db'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -25,21 +25,21 @@ export async function GET(
 }
 
 export async function PUT(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const json = await request.json()
+    const body = await request.json()
     const client = await prisma.client.update({
       where: { id: params.id },
       data: {
-        name: json.name,
-        email: json.email,
-        phone: json.phone,
-        type: json.type,
-        status: json.status,
-        properties: json.properties,
-        lastContact: new Date(json.lastContact),
+        name: body.name,
+        email: body.email,
+        phone: body.phone,
+        type: body.type,
+        status: body.status,
+        properties: body.properties,
+        lastContact: new Date(body.lastContactDate),
       }
     })
     return NextResponse.json(client)
@@ -52,14 +52,14 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     await prisma.client.delete({
       where: { id: params.id }
     })
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ message: 'Client deleted successfully' })
   } catch (error) {
     return NextResponse.json(
       { error: 'Failed to delete client' },
