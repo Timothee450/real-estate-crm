@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/db";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { sign } from "jsonwebtoken";
 import { cookies } from "next/headers";
 
 export async function POST(request: Request) {
@@ -9,11 +9,14 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { email, password } = body;
 
-    // Find user
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
-
+    // Find user by email
+    const result = await db.query(
+      'SELECT * FROM users WHERE email = $1',
+      [email]
+    );
+    
+    const user = result.rows[0];
+    
     if (!user) {
       return NextResponse.json(
         { error: "Invalid credentials" },
@@ -22,45 +25,48 @@ export async function POST(request: Request) {
     }
 
     // Check password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
+    const passwordMatches = await bcrypt.compare(password, user.password);
+    
+    if (!passwordMatches) {
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401 }
       );
     }
 
-    // Create token
-    const token = sign(
-      { userId: user.id, email: user.email },
-      process.env.JWT_SECRET || "your-secret-key",
+    // Create JWT token
+    const token = jwt.sign(
+      {
+        sub: user.id,
+        email: user.email,
+      },
+      process.env.JWT_SECRET || "default-secret",
       { expiresIn: "7d" }
     );
 
-    // Remove password from response
-    const { password: _, ...userWithoutPassword } = user;
-
-    // Create response with user data
+    // Set cookie
     const response = NextResponse.json({
-      user: userWithoutPassword,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
     });
 
-    // Set token in cookie
     response.cookies.set({
-      name: "token",
+      name: 'token',
       value: token,
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60, // 7 days
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+      path: '/',
     });
 
     return response;
   } catch (error) {
     console.error("Login error:", error);
     return NextResponse.json(
-      { error: "Error logging in" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

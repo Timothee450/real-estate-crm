@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
-import { jwtVerify } from 'jose';
+import jwt from 'jsonwebtoken';
+import { db } from './db';
 
 export async function auth() {
   try {
@@ -10,14 +11,31 @@ export async function auth() {
       return null;
     }
 
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-    const { payload } = await jwtVerify(token, secret);
+    const secret = process.env.JWT_SECRET || 'default-secret';
+    const payload = jwt.verify(token, secret);
+
+    if (!payload || typeof payload !== 'object') {
+      return null;
+    }
+
+    // Get user from database
+    const userId = payload.sub as string;
+    const result = await db.query(
+      'SELECT id, email, name FROM users WHERE id = $1',
+      [userId]
+    );
+
+    const user = result.rows[0];
+    if (!user) {
+      return null;
+    }
 
     return {
       user: {
-        id: payload.sub,
-        email: payload.email,
-      },
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      }
     };
   } catch (error) {
     console.error('Auth error:', error);
