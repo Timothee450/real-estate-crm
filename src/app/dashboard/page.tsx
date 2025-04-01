@@ -1,55 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-
-const stats = [
-  {
-    title: "Active Tasks",
-    value: "12",
-    description: "Tasks that need your attention",
-  },
-  {
-    title: "Upcoming Appointments",
-    value: "5",
-    description: "Next 7 days",
-  },
-  {
-    title: "Pending Documents",
-    value: "8",
-    description: "Documents awaiting review",
-  },
-  {
-    title: "Total Clients",
-    value: "24",
-    description: "Active clients in your portfolio",
-  },
-];
-
-const recentActivity = [
-  {
-    title: "New client registration",
-    description: "Sarah Johnson registered as a new client",
-    time: "2 hours ago",
-  },
-  {
-    title: "Document uploaded",
-    description: "Contract for 123 Main St. was uploaded",
-    time: "4 hours ago",
-  },
-  {
-    title: "Task completed",
-    description: "Property inspection completed for 456 Oak Ave",
-    time: "5 hours ago",
-  },
-  {
-    title: "Appointment scheduled",
-    description: "Meeting with client scheduled for tomorrow",
-    time: "1 day ago",
-  },
-];
-
 export default function DashboardPage() {
   return (
-    <div style={{ maxWidth: '800px', margin: '40px auto', padding: '20px' }}>
+    <div style={{ 
+      maxWidth: '800px', 
+      margin: '40px auto', 
+      padding: '20px',
+      fontFamily: 'Arial, sans-serif'
+    }}>
       <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>Dashboard</h1>
       
       <div style={{ 
@@ -57,74 +13,77 @@ export default function DashboardPage() {
         backgroundColor: '#f8f9fa',
         border: '1px solid #dee2e6',
         borderRadius: '8px',
-        marginBottom: '30px'
+        marginBottom: '30px' 
       }}>
-        <h2 style={{ margin: '0 0 15px 0' }}>Welcome to your Dashboard</h2>
-        <p>You have successfully accessed the dashboard page.</p>
+        <p style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '15px' }}>
+          Success! You have successfully accessed the dashboard.
+        </p>
+        <p>This is a stripped down version of the dashboard for testing purposes.</p>
       </div>
       
       <div style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', 
+        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', 
         gap: '20px',
         marginBottom: '30px'
       }}>
         <div style={{ 
-          padding: '15px', 
-          backgroundColor: 'white', 
-          border: '1px solid #dee2e6',
-          borderRadius: '8px'
+          padding: '20px', 
+          backgroundColor: '#e8f4f8', 
+          borderRadius: '8px',
+          textAlign: 'center'
         }}>
-          <h3 style={{ margin: '0 0 10px 0' }}>Clients</h3>
-          <p style={{ margin: '0' }}>0 active clients</p>
+          <h3 style={{ marginTop: 0 }}>Clients</h3>
+          <p style={{ fontSize: '24px', fontWeight: 'bold' }}>0</p>
+          <p>Active Clients</p>
         </div>
         
         <div style={{ 
-          padding: '15px', 
-          backgroundColor: 'white', 
-          border: '1px solid #dee2e6',
-          borderRadius: '8px'
+          padding: '20px', 
+          backgroundColor: '#e8f8ea', 
+          borderRadius: '8px',
+          textAlign: 'center'
         }}>
-          <h3 style={{ margin: '0 0 10px 0' }}>Properties</h3>
-          <p style={{ margin: '0' }}>0 listed properties</p>
+          <h3 style={{ marginTop: 0 }}>Properties</h3>
+          <p style={{ fontSize: '24px', fontWeight: 'bold' }}>0</p>
+          <p>Listed Properties</p>
         </div>
         
         <div style={{ 
-          padding: '15px', 
-          backgroundColor: 'white', 
-          border: '1px solid #dee2e6',
-          borderRadius: '8px'
+          padding: '20px', 
+          backgroundColor: '#f8f0e8', 
+          borderRadius: '8px',
+          textAlign: 'center'
         }}>
-          <h3 style={{ margin: '0 0 10px 0' }}>Tasks</h3>
-          <p style={{ margin: '0' }}>0 pending tasks</p>
+          <h3 style={{ marginTop: 0 }}>Tasks</h3>
+          <p style={{ fontSize: '24px', fontWeight: 'bold' }}>0</p>
+          <p>Pending Tasks</p>
         </div>
       </div>
       
-      <div style={{ textAlign: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
         <a 
           href="/" 
-          style={{ 
-            display: 'inline-block',
-            padding: '8px 16px',
+          style={{
             backgroundColor: '#007bff',
             color: 'white',
             textDecoration: 'none',
-            borderRadius: '4px',
-            marginRight: '10px'
+            padding: '10px 20px',
+            borderRadius: '5px',
+            fontWeight: 'bold'
           }}
         >
           Back to Home
         </a>
-        
         <a 
           href="/static" 
-          style={{ 
-            display: 'inline-block',
-            padding: '8px 16px',
+          style={{
             backgroundColor: '#6c757d',
             color: 'white',
             textDecoration: 'none',
-            borderRadius: '4px'
+            padding: '10px 20px',
+            borderRadius: '5px',
+            fontWeight: 'bold'
           }}
         >
           Static Page

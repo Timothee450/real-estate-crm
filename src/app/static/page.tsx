@@ -1,96 +1,68 @@
 export default function StaticPage() {
   return (
-    <div style={{ maxWidth: '800px', margin: '40px auto', padding: '20px' }}>
-      <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>Real Estate CRM - Static Page</h1>
-
+    <div style={{ 
+      maxWidth: '800px', 
+      margin: '40px auto', 
+      padding: '20px',
+      fontFamily: 'Arial, sans-serif'
+    }}>
+      <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>Static Page</h1>
+      
       <div style={{ 
         padding: '20px', 
-        backgroundColor: '#f5f5f5', 
+        backgroundColor: '#f8f9fa',
+        border: '1px solid #dee2e6',
         borderRadius: '8px',
-        marginBottom: '30px'
+        marginBottom: '30px' 
       }}>
-        <h2 style={{ marginTop: 0, marginBottom: '15px' }}>⚠️ Emergency Login Solution</h2>
-        <p style={{ marginBottom: '15px' }}>
-          If you're having trouble with API routes or database connectivity, use our direct login option:
+        <p style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '15px' }}>
+          Success! This is a simple static page.
         </p>
-        <a 
-          href="/direct-login" 
-          style={{
-            display: 'block',
-            textAlign: 'center',
-            padding: '12px',
-            backgroundColor: '#4caf50',
-            color: 'white',
-            textDecoration: 'none',
-            borderRadius: '4px',
-            fontWeight: 'bold'
-          }}
-        >
-          Go to Direct Login
-        </a>
-        <p style={{ marginTop: '10px', fontSize: '14px', color: '#666' }}>
-          This login bypasses the database and API routes completely. Use admin@example.com / admin123
-        </p>
+        <p>If you can see this page but not others, it suggests that there might be issues with dynamic routes or server components.</p>
       </div>
-
-      <div style={{ marginBottom: '30px' }}>
-        <h2 style={{ marginBottom: '15px' }}>Other Options</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-          <a 
-            href="/minimal" 
-            style={{
-              display: 'block',
-              padding: '15px',
-              backgroundColor: '#2196f3',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '4px',
-              textAlign: 'center'
-            }}
-          >
-            Minimal Diagnostic Page
-          </a>
-          <a 
-            href="/api/status" 
-            style={{
-              display: 'block',
-              padding: '15px',
-              backgroundColor: '#ff9800',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '4px',
-              textAlign: 'center'
-            }}
-          >
-            Check API Status
-          </a>
-        </div>
-      </div>
-
-      <div style={{
-        padding: '15px',
-        backgroundColor: '#e1f5fe',
+      
+      <div style={{ 
+        padding: '20px', 
+        backgroundColor: '#fff3cd',
+        border: '1px solid #ffeeba',
         borderRadius: '8px',
-        marginBottom: '30px'
+        marginBottom: '30px' 
       }}>
-        <h3 style={{ marginTop: 0, marginBottom: '10px' }}>Troubleshooting Steps</h3>
-        <ol style={{ paddingLeft: '20px', margin: 0 }}>
-          <li style={{ marginBottom: '8px' }}>Check if API routes are working by visiting <strong>/api/status</strong></li>
-          <li style={{ marginBottom: '8px' }}>Try the direct login which uses no API or database</li>
-          <li style={{ marginBottom: '8px' }}>Check Vercel logs for build errors</li>
+        <h3 style={{ marginTop: 0 }}>Troubleshooting Next.js on Vercel</h3>
+        <ul style={{ paddingLeft: '20px' }}>
+          <li style={{ marginBottom: '8px' }}>Check your Vercel deployment logs</li>
           <li style={{ marginBottom: '8px' }}>Verify environment variables are correctly set</li>
-        </ol>
+          <li style={{ marginBottom: '8px' }}>Consider simplifying your codebase if needed</li>
+          <li style={{ marginBottom: '8px' }}>If using database connections, ensure they're correctly configured</li>
+        </ul>
       </div>
-
-      <div style={{ textAlign: 'center' }}>
+      
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
         <a 
           href="/" 
           style={{
-            color: '#1976d2',
-            textDecoration: 'none'
+            backgroundColor: '#007bff',
+            color: 'white',
+            textDecoration: 'none',
+            padding: '10px 20px',
+            borderRadius: '5px',
+            fontWeight: 'bold'
           }}
         >
           Back to Home
+        </a>
+        <a 
+          href="/api/hello" 
+          style={{
+            backgroundColor: '#28a745',
+            color: 'white',
+            textDecoration: 'none',
+            padding: '10px 20px',
+            borderRadius: '5px',
+            fontWeight: 'bold'
+          }}
+        >
+          Test API
         </a>
       </div>
     </div>
