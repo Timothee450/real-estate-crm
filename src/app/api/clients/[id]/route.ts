@@ -1,13 +1,14 @@
 import { prisma } from '@/lib/db'
 import { NextRequest, NextResponse } from 'next/server'
+import { RouteContext } from '@/types/next'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: RouteContext
 ) {
   try {
     const client = await prisma.client.findUnique({
-      where: { id: params.id }
+      where: { id: context.params.id }
     })
     if (!client) {
       return NextResponse.json(
@@ -26,12 +27,12 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: RouteContext
 ) {
   try {
     const body = await request.json()
     const client = await prisma.client.update({
-      where: { id: params.id },
+      where: { id: context.params.id },
       data: {
         name: body.name,
         email: body.email,
@@ -53,11 +54,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: RouteContext
 ) {
   try {
     await prisma.client.delete({
-      where: { id: params.id }
+      where: { id: context.params.id }
     })
     return NextResponse.json({ message: 'Client deleted successfully' })
   } catch (error) {
