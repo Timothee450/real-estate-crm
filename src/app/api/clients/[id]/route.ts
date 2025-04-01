@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
 
-// GET endpoint to fetch a specific client by ID
-export const GET = async (
-  req: NextRequest,
-  context: { params: { id: string } }
-) => {
-  try {
+// GET handler
+export function GET(
+  request: Request | NextRequest,
+  { params }: { params: { id: string } }
+) {
+  return handleRequest(async () => {
     const session = await auth();
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -15,7 +15,7 @@ export const GET = async (
 
     const client = await db.query(
       'SELECT * FROM clients WHERE id = $1 AND user_id = $2',
-      [context.params.id, session.user.id]
+      [params.id, session.user.id]
     );
 
     if (client.rows.length === 0) {
@@ -23,27 +23,21 @@ export const GET = async (
     }
 
     return NextResponse.json(client.rows[0]);
-  } catch (error) {
-    console.error('Error fetching client:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
-};
+  });
+}
 
-// PUT endpoint to update a specific client
-export const PUT = async (
-  req: NextRequest,
-  context: { params: { id: string } }
-) => {
-  try {
+// PUT handler
+export function PUT(
+  request: Request | NextRequest,
+  { params }: { params: { id: string } }
+) {
+  return handleRequest(async () => {
     const session = await auth();
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await req.json();
+    const body = await request.json();
     const { name, email, phone, notes } = body;
 
     const client = await db.query(
@@ -51,7 +45,7 @@ export const PUT = async (
        SET name = $1, email = $2, phone = $3, notes = $4, updated_at = NOW()
        WHERE id = $5 AND user_id = $6
        RETURNING *`,
-      [name, email, phone, notes, context.params.id, session.user.id]
+      [name, email, phone, notes, params.id, session.user.id]
     );
 
     if (client.rows.length === 0) {
@@ -59,21 +53,15 @@ export const PUT = async (
     }
 
     return NextResponse.json(client.rows[0]);
-  } catch (error) {
-    console.error('Error updating client:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
-};
+  });
+}
 
-// DELETE endpoint to remove a specific client
-export const DELETE = async (
-  req: NextRequest,
-  context: { params: { id: string } }
-) => {
-  try {
+// DELETE handler
+export function DELETE(
+  request: Request | NextRequest,
+  { params }: { params: { id: string } }
+) {
+  return handleRequest(async () => {
     const session = await auth();
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -81,7 +69,7 @@ export const DELETE = async (
 
     const client = await db.query(
       'DELETE FROM clients WHERE id = $1 AND user_id = $2 RETURNING *',
-      [context.params.id, session.user.id]
+      [params.id, session.user.id]
     );
 
     if (client.rows.length === 0) {
@@ -89,11 +77,18 @@ export const DELETE = async (
     }
 
     return NextResponse.json({ message: 'Client deleted successfully' });
+  });
+}
+
+// Helper function to handle requests and catch errors
+async function handleRequest(handler: () => Promise<Response>) {
+  try {
+    return await handler();
   } catch (error) {
-    console.error('Error deleting client:', error);
+    console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
   }
-}; 
+} 

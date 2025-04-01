@@ -10,44 +10,57 @@ export const db = {
 };
 
 // Mock Prisma client for backward compatibility
+const client = {
+  findMany: async () => [],
+  findUnique: async () => null,
+  create: async () => ({}),
+  update: async () => ({}),
+  delete: async () => ({})
+};
+
+const expense = {
+  findMany: async () => [],
+  findUnique: async () => null,
+  create: async () => ({}),
+  update: async () => ({}),
+  delete: async () => ({})
+};
+
+const task = {
+  findMany: async () => [],
+  findUnique: async () => null,
+  create: async () => ({}),
+  update: async () => ({}),
+  delete: async () => ({})
+};
+
+const document = {
+  findMany: async () => [],
+  findUnique: async () => null,
+  create: async () => ({}),
+  update: async () => ({}),
+  delete: async () => ({})
+};
+
+const appointment = {
+  findMany: async () => [],
+  findUnique: async () => null,
+  create: async () => ({}),
+  update: async () => ({}),
+  delete: async () => ({})
+};
+
+const user = {
+  findUnique: async () => null,
+  create: async () => ({})
+};
+
+// Export the prisma object
 export const prisma = {
-  client: {
-    findMany: async () => [],
-    findUnique: async () => null,
-    create: async () => ({}),
-    update: async () => ({}),
-    delete: async () => ({})
-  },
-  expense: {
-    findMany: async () => [],
-    findUnique: async () => null,
-    create: async () => ({}),
-    update: async () => ({}),
-    delete: async () => ({})
-  },
-  task: {
-    findMany: async () => [],
-    findUnique: async () => null,
-    create: async () => ({}),
-    update: async () => ({}),
-    delete: async () => ({})
-  },
-  document: {
-    findMany: async () => [],
-    findUnique: async () => null,
-    create: async () => ({}),
-    update: async () => ({}),
-    delete: async () => ({})
-  },
-  appointment: {
-    findMany: async () => [],
-    findUnique: async () => null,
-    create: async () => ({}),
-    update: async () => ({}),
-    delete: async () => ({})
-  },
-  user: {
-    findUnique: async () => null,
-    create: async () => ({})
-  }
+  client,
+  expense,
+  task,
+  document,
+  appointment,
+  user
 }; 
