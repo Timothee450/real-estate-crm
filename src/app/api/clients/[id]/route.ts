@@ -3,10 +3,10 @@ import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
 
 // GET endpoint to fetch a specific client by ID
-export async function GET(
+export const GET = async (
   req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  context: { params: { id: string } }
+) => {
   try {
     const session = await auth();
     if (!session) {
@@ -15,7 +15,7 @@ export async function GET(
 
     const client = await db.query(
       'SELECT * FROM clients WHERE id = $1 AND user_id = $2',
-      [params.id, session.user.id]
+      [context.params.id, session.user.id]
     );
 
     if (client.rows.length === 0) {
@@ -30,13 +30,13 @@ export async function GET(
       { status: 500 }
     );
   }
-}
+};
 
 // PUT endpoint to update a specific client
-export async function PUT(
+export const PUT = async (
   req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  context: { params: { id: string } }
+) => {
   try {
     const session = await auth();
     if (!session) {
@@ -51,7 +51,7 @@ export async function PUT(
        SET name = $1, email = $2, phone = $3, notes = $4, updated_at = NOW()
        WHERE id = $5 AND user_id = $6
        RETURNING *`,
-      [name, email, phone, notes, params.id, session.user.id]
+      [name, email, phone, notes, context.params.id, session.user.id]
     );
 
     if (client.rows.length === 0) {
@@ -66,13 +66,13 @@ export async function PUT(
       { status: 500 }
     );
   }
-}
+};
 
 // DELETE endpoint to remove a specific client
-export async function DELETE(
+export const DELETE = async (
   req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  context: { params: { id: string } }
+) => {
   try {
     const session = await auth();
     if (!session) {
@@ -81,7 +81,7 @@ export async function DELETE(
 
     const client = await db.query(
       'DELETE FROM clients WHERE id = $1 AND user_id = $2 RETURNING *',
-      [params.id, session.user.id]
+      [context.params.id, session.user.id]
     );
 
     if (client.rows.length === 0) {
@@ -96,4 +96,4 @@ export async function DELETE(
       { status: 500 }
     );
   }
-} 
+}; 
