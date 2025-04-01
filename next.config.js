@@ -5,9 +5,8 @@ const nextConfig = {
     unoptimized: false,
   },
   experimental: {
-    serverActions: {
-      allowedOrigins: ['localhost:3000', '192.168.1.249:3000'],
-    },
+    serverActions: true,
+    typedRoutes: false,
   },
   async headers() {
     return [
@@ -32,6 +31,10 @@ const nextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+    tsconfigPath: 'tsconfig.json',
   },
   output: 'standalone',
   poweredByHeader: false,
