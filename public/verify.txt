@@ -1,0 +1,4 @@
+This file is used to verify that static files are being served correctly from the Vercel deployment.
+
+Static file serving: OK
+Timestamp: 2024-05-02T18:00:00.000Z 

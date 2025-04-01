@@ -1,3 +1,6 @@
+// Specify Node.js runtime to avoid Edge compatibility issues
+export const runtime = 'nodejs';
+
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";

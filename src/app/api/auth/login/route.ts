@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
+import { cookies } from 'next/headers';
 import { db } from "@/lib/db";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
+import * as bcrypt from "bcryptjs";
+
+// Specify Node.js runtime to avoid Edge compatibility issues
+export const runtime = 'nodejs';
 
 export async function POST(request: Request) {
   try {

@@ -5,6 +5,9 @@ import { verifyJWT } from './lib/auth';
 // Flag to track if we've already checked the system on startup
 let systemChecked = false;
 
+// Specify Node.js runtime to avoid Edge compatibility issues with jsonwebtoken
+export const runtime = 'nodejs';
+
 export async function middleware(request: NextRequest) {
   // For API routes that should be protected
   if (request.nextUrl.pathname.startsWith('/api/protected') ||

@@ -2,6 +2,9 @@ import * as jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 
+// Specify Node.js runtime to avoid Edge compatibility issues with jsonwebtoken
+export const runtime = 'nodejs';
+
 export interface JwtPayload {
   id: string | number;
   email: string;
