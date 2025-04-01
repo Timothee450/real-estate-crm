@@ -49,57 +49,87 @@ const recentActivity = [
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <Button>New Task</Button>
+    <div style={{ maxWidth: '800px', margin: '40px auto', padding: '20px' }}>
+      <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>Dashboard</h1>
+      
+      <div style={{ 
+        padding: '20px', 
+        backgroundColor: '#f8f9fa',
+        border: '1px solid #dee2e6',
+        borderRadius: '8px',
+        marginBottom: '30px'
+      }}>
+        <h2 style={{ margin: '0 0 15px 0' }}>Welcome to your Dashboard</h2>
+        <p>You have successfully accessed the dashboard page.</p>
       </div>
-
-      {/* Stats Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <Card key={stat.title}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {stat.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-              <p className="text-xs text-muted-foreground">
-                {stat.description}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
+      
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', 
+        gap: '20px',
+        marginBottom: '30px'
+      }}>
+        <div style={{ 
+          padding: '15px', 
+          backgroundColor: 'white', 
+          border: '1px solid #dee2e6',
+          borderRadius: '8px'
+        }}>
+          <h3 style={{ margin: '0 0 10px 0' }}>Clients</h3>
+          <p style={{ margin: '0' }}>0 active clients</p>
+        </div>
+        
+        <div style={{ 
+          padding: '15px', 
+          backgroundColor: 'white', 
+          border: '1px solid #dee2e6',
+          borderRadius: '8px'
+        }}>
+          <h3 style={{ margin: '0 0 10px 0' }}>Properties</h3>
+          <p style={{ margin: '0' }}>0 listed properties</p>
+        </div>
+        
+        <div style={{ 
+          padding: '15px', 
+          backgroundColor: 'white', 
+          border: '1px solid #dee2e6',
+          borderRadius: '8px'
+        }}>
+          <h3 style={{ margin: '0 0 10px 0' }}>Tasks</h3>
+          <p style={{ margin: '0' }}>0 pending tasks</p>
+        </div>
       </div>
-
-      {/* Recent Activity */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {recentActivity.map((activity) => (
-              <div
-                key={activity.title}
-                className="flex items-center justify-between border-b pb-4 last:border-0"
-              >
-                <div>
-                  <h3 className="font-medium">{activity.title}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {activity.description}
-                  </p>
-                </div>
-                <span className="text-sm text-muted-foreground">
-                  {activity.time}
-                </span>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      
+      <div style={{ textAlign: 'center' }}>
+        <a 
+          href="/" 
+          style={{ 
+            display: 'inline-block',
+            padding: '8px 16px',
+            backgroundColor: '#007bff',
+            color: 'white',
+            textDecoration: 'none',
+            borderRadius: '4px',
+            marginRight: '10px'
+          }}
+        >
+          Back to Home
+        </a>
+        
+        <a 
+          href="/static" 
+          style={{ 
+            display: 'inline-block',
+            padding: '8px 16px',
+            backgroundColor: '#6c757d',
+            color: 'white',
+            textDecoration: 'none',
+            borderRadius: '4px'
+          }}
+        >
+          Static Page
+        </a>
+      </div>
     </div>
   );
 } 

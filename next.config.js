@@ -1,46 +1,41 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Use the simplest possible config for Vercel compatibility
+  output: 'standalone',
+  reactStrictMode: true,
+  swcMinify: true,
+  poweredByHeader: false,
+  
+  // Add trailing slash for better compatibility with some hosting setups
+  trailingSlash: true,
+  
+  // Disable image optimization if it's causing issues
   images: {
-    domains: ['avatars.githubusercontent.com'],
-    unoptimized: false,
+    unoptimized: true,
   },
-  experimental: {
-    serverActions: true,
-    typedRoutes: false,
-  },
+  
+  // Simple headers
   async headers() {
     return [
       {
-        source: '/:path*',
+        source: '/(.*)',
         headers: [
           {
-            key: 'Access-Control-Allow-Origin',
-            value: '*',
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
           },
           {
-            key: 'Access-Control-Allow-Methods',
-            value: 'GET, POST, PUT, DELETE, OPTIONS',
+            key: 'X-Frame-Options',
+            value: 'DENY',
           },
           {
-            key: 'Access-Control-Allow-Headers',
-            value: 'Content-Type, Authorization',
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
           },
         ],
       },
     ];
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-    tsconfigPath: 'tsconfig.json',
-  },
-  output: 'standalone',
-  poweredByHeader: false,
-  reactStrictMode: true,
-  compress: true,
-  generateEtags: true,
-}
+};
 
-module.exports = nextConfig 
+module.exports = nextConfig; 
