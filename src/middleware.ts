@@ -1,44 +1,54 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { verify } from "jsonwebtoken";
+import { verifyJWT } from './lib/auth';
 
-export function middleware(request: NextRequest) {
-  // Get the pathname of the request
-  const path = request.nextUrl.pathname;
+// Flag to track if we've already checked the system on startup
+let systemChecked = false;
 
-  // Define public paths that don't require authentication
-  const isPublicPath = path === "/login" || path === "/register";
-
-  // Get the token from the cookies
-  const token = request.cookies.get("token")?.value || "";
-
-  // Redirect logic
-  if (isPublicPath && token) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
-  }
-
-  if (!isPublicPath && !token) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-
-  // Verify token for protected routes
-  if (!isPublicPath && token) {
+export async function middleware(request: NextRequest) {
+  // For API routes that should be protected
+  if (request.nextUrl.pathname.startsWith('/api/protected') ||
+      request.nextUrl.pathname.startsWith('/api/clients') || 
+      request.nextUrl.pathname.startsWith('/api/properties')) {
     try {
-      verify(token, process.env.JWT_SECRET || "your-secret-key");
+      // Verify the JWT token
+      const token = request.cookies.get('token')?.value;
+      
+      if (!token) {
+        return NextResponse.json(
+          { error: 'Authentication required' },
+          { status: 401 }
+        );
+      }
+      
+      const verified = await verifyJWT(token);
+      if (!verified) {
+        return NextResponse.json(
+          { error: 'Invalid or expired token' },
+          { status: 401 }
+        );
+      }
+      
+      // If verification passed, continue to the route
+      return NextResponse.next();
     } catch (error) {
-      // If token is invalid, redirect to login
-      return NextResponse.redirect(new URL("/login", request.url));
+      console.error('Authentication middleware error:', error);
+      return NextResponse.json(
+        { error: 'Authentication error' },
+        { status: 401 }
+      );
     }
   }
-
+  
+  // For all other routes, just continue
   return NextResponse.next();
 }
 
-// Configure which routes to run middleware on
+// Configure which paths should trigger this middleware
 export const config = {
   matcher: [
-    "/dashboard/:path*",
-    "/login",
-    "/register",
+    '/api/protected/:path*',
+    '/api/clients/:path*',
+    '/api/properties/:path*'
   ],
 }; 
