@@ -1,109 +1,109 @@
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+"use client";
+
 import Link from "next/link";
+import { useState } from 'react';
 
 export default function Home() {
+  const [status, setStatus] = useState<{[key: string]: any} | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  
+  const checkEndpoint = async (endpoint: string) => {
+    setLoading(true);
+    setError('');
+    try {
+      const response = await fetch(endpoint);
+      if (!response.ok) {
+        setError(`Error: ${response.status} ${response.statusText}`);
+        return;
+      }
+      const data = await response.json();
+      setStatus(data);
+    } catch (err) {
+      setError(`Failed to check endpoint: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b">
-        <div className="container flex h-16 items-center justify-between px-4">
-          <div className="text-2xl font-bold">Real Estate Terminal</div>
-          <nav className="flex gap-4">
-            <Link href="/login">
-              <Button variant="ghost">Login</Button>
-            </Link>
-            <Link href="/register">
-              <Button>Register</Button>
-            </Link>
-          </nav>
-        </div>
-      </header>
-
-      <main>
-        {/* Hero Section */}
-        <section className="container px-4 py-24 text-center">
-          <h1 className="mb-6 text-4xl font-bold md:text-6xl">
-            Streamline Your Real Estate Business
-          </h1>
-          <p className="mb-8 text-xl text-muted-foreground">
-            Manage tasks, schedules, and client communication all in one place. Designed specifically for real estate professionals.
-          </p>
-          <div className="flex justify-center gap-4">
-            <Button size="lg" asChild>
-              <Link href="/register">Get Started</Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href="#features">Learn More</Link>
-            </Button>
+    <main className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6 text-center">Real Estate CRM</h1>
+        
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <h2 className="text-xl font-semibold mb-4">System Status</h2>
+          
+          <div className="flex flex-wrap gap-4 mb-6">
+            <button
+              onClick={() => checkEndpoint('/api/test')}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              disabled={loading}
+            >
+              Test API Connection
+            </button>
+            
+            <button
+              onClick={() => checkEndpoint('/api/setup')}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+              disabled={loading}
+            >
+              Check System Setup
+            </button>
+            
+            <button
+              onClick={() => checkEndpoint('/api/auth/addtestuser')}
+              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
+              disabled={loading}
+            >
+              Create Test User
+            </button>
           </div>
-        </section>
-
-        {/* Features Section */}
-        <section id="features" className="container px-4 py-24">
-          <h2 className="mb-12 text-center text-3xl font-bold">Core Features</h2>
-          <p className="mb-12 text-center text-xl text-muted-foreground">
-            Everything you need to manage your real estate business efficiently
-          </p>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {features.map((feature) => (
-              <Card key={feature.title} className="p-6">
-                <h3 className="mb-2 text-xl font-bold">{feature.title}</h3>
-                <p className="text-muted-foreground">{feature.description}</p>
-              </Card>
-            ))}
-          </div>
-        </section>
-      </main>
-
-      <footer className="border-t">
-        <div className="container px-4 py-8">
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <div className="text-center md:text-left">
-              <p className="text-sm text-muted-foreground">
-                © 2025 Real Estate Terminal. All rights reserved.
-              </p>
+          
+          {error && (
+            <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
+              {error}
             </div>
-            <nav className="flex gap-4">
-              <Link href="/terms" className="text-sm text-muted-foreground hover:underline">
-                Terms
-              </Link>
-              <Link href="/privacy" className="text-sm text-muted-foreground hover:underline">
-                Privacy
-              </Link>
-              <Link href="/contact" className="text-sm text-muted-foreground hover:underline">
-                Contact
-              </Link>
-            </nav>
-          </div>
+          )}
+          
+          {loading && (
+            <div className="mb-4 p-4 bg-gray-100 rounded-md">
+              Loading...
+            </div>
+          )}
+          
+          {status && (
+            <div className="mb-4 p-4 bg-gray-100 rounded-md">
+              <h3 className="font-semibold mb-2">API Response:</h3>
+              <pre className="whitespace-pre-wrap text-xs overflow-auto max-h-96">
+                {JSON.stringify(status, null, 2)}
+              </pre>
+            </div>
+          )}
         </div>
-      </footer>
-    </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Link href="/login" className="block">
+            <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-300">
+              <h2 className="text-xl font-semibold mb-2">Login</h2>
+              <p className="text-gray-600">Access your account</p>
+            </div>
+          </Link>
+          
+          <Link href="/dashboard" className="block">
+            <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-300">
+              <h2 className="text-xl font-semibold mb-2">Dashboard</h2>
+              <p className="text-gray-600">View your dashboard</p>
+            </div>
+          </Link>
+        </div>
+        
+        <div className="mt-8 text-center text-gray-500">
+          <p>
+            Test User Credentials: <strong>test@example.com</strong> / <strong>password123</strong>
+          </p>
+        </div>
+      </div>
+    </main>
   );
 }
-
-const features = [
-  {
-    title: "Task Management",
-    description: "Manage client requests, approvals, and task assignments in one place.",
-  },
-  {
-    title: "Scheduling",
-    description: "Manage your calendar, book appointments, and send confirmations.",
-  },
-  {
-    title: "Document Management",
-    description: "Generate forms, upload documents, and manage contracts.",
-  },
-  {
-    title: "Expense Tracking",
-    description: "Track expenses and mileage for better financial management.",
-  },
-  {
-    title: "Client Management",
-    description: "Maintain client profiles and set follow-up reminders.",
-  },
-  {
-    title: "Team Collaboration",
-    description: "Work together with your team and assign tasks efficiently.",
-  },
-];
