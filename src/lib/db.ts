@@ -1,54 +1,21 @@
 import { Pool } from 'pg';
 
-// PostgreSQL connection
-const pool = new Pool({
+// Create PostgreSQL connection pool
+const db = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? {
+    rejectUnauthorized: false
+  } : undefined
 });
 
-// Export db object
-export const db = {
-  query: (text: string, params?: any[]) => pool.query(text, params),
+// Export a prisma-like interface for backward compatibility
+export const prisma = {
+  user: {
+    findUnique: async ({ where }: { where: { email: string } }) => {
+      const result = await db.query('SELECT * FROM users WHERE email = $1', [where.email]);
+      return result.rows[0] || null;
+    }
+  }
 };
 
-// Export prisma object with empty implementations
-export const prisma = {
-  client: {
-    findMany: async () => [],
-    findUnique: async () => null,
-    create: async () => ({}),
-    update: async () => ({}),
-    delete: async () => ({})
-  },
-  expense: {
-    findMany: async () => [],
-    findUnique: async () => null,
-    create: async () => ({}),
-    update: async () => ({}),
-    delete: async () => ({})
-  },
-  task: {
-    findMany: async () => [],
-    findUnique: async () => null,
-    create: async () => ({}),
-    update: async () => ({}),
-    delete: async () => ({})
-  },
-  document: {
-    findMany: async () => [],
-    findUnique: async () => null,
-    create: async () => ({}),
-    update: async () => ({}),
-    delete: async () => ({})
-  },
-  appointment: {
-    findMany: async () => [],
-    findUnique: async () => null,
-    create: async () => ({}),
-    update: async () => ({}),
-    delete: async () => ({})
-  },
-  user: {
-    findUnique: async () => null,
-    create: async () => ({})
-  }
-}; 
+export { db }; 
