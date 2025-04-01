@@ -1,70 +1,96 @@
-import { prisma } from '@/lib/db'
-import { NextRequest, NextResponse } from 'next/server'
-import { RouteContext } from '@/types/next'
+import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@/lib/db';
+import { auth } from '@/lib/auth';
 
 export async function GET(
   request: NextRequest,
-  context: RouteContext
+  { params }: { params: { id: string } }
 ) {
   try {
-    const client = await prisma.client.findUnique({
-      where: { id: context.params.id }
-    })
-    if (!client) {
-      return NextResponse.json(
-        { error: 'Client not found' },
-        { status: 404 }
-      )
+    const session = await auth();
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    return NextResponse.json(client)
+
+    const client = await db.query(
+      'SELECT * FROM clients WHERE id = $1 AND user_id = $2',
+      [params.id, session.user.id]
+    );
+
+    if (client.rows.length === 0) {
+      return NextResponse.json({ error: 'Client not found' }, { status: 404 });
+    }
+
+    return NextResponse.json(client.rows[0]);
   } catch (error) {
+    console.error('Error fetching client:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch client' },
+      { error: 'Internal server error' },
       { status: 500 }
-    )
+    );
   }
 }
 
 export async function PUT(
   request: NextRequest,
-  context: RouteContext
+  { params }: { params: { id: string } }
 ) {
   try {
-    const body = await request.json()
-    const client = await prisma.client.update({
-      where: { id: context.params.id },
-      data: {
-        name: body.name,
-        email: body.email,
-        phone: body.phone,
-        type: body.type,
-        status: body.status,
-        properties: body.properties,
-        lastContact: new Date(body.lastContactDate),
-      }
-    })
-    return NextResponse.json(client)
+    const session = await auth();
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { name, email, phone, notes } = body;
+
+    const client = await db.query(
+      `UPDATE clients 
+       SET name = $1, email = $2, phone = $3, notes = $4, updated_at = NOW()
+       WHERE id = $5 AND user_id = $6
+       RETURNING *`,
+      [name, email, phone, notes, params.id, session.user.id]
+    );
+
+    if (client.rows.length === 0) {
+      return NextResponse.json({ error: 'Client not found' }, { status: 404 });
+    }
+
+    return NextResponse.json(client.rows[0]);
   } catch (error) {
+    console.error('Error updating client:', error);
     return NextResponse.json(
-      { error: 'Failed to update client' },
+      { error: 'Internal server error' },
       { status: 500 }
-    )
+    );
   }
 }
 
 export async function DELETE(
   request: NextRequest,
-  context: RouteContext
+  { params }: { params: { id: string } }
 ) {
   try {
-    await prisma.client.delete({
-      where: { id: context.params.id }
-    })
-    return NextResponse.json({ message: 'Client deleted successfully' })
+    const session = await auth();
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const client = await db.query(
+      'DELETE FROM clients WHERE id = $1 AND user_id = $2 RETURNING *',
+      [params.id, session.user.id]
+    );
+
+    if (client.rows.length === 0) {
+      return NextResponse.json({ error: 'Client not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: 'Client deleted successfully' });
   } catch (error) {
+    console.error('Error deleting client:', error);
     return NextResponse.json(
-      { error: 'Failed to delete client' },
+      { error: 'Internal server error' },
       { status: 500 }
-    )
+    );
   }
 } 

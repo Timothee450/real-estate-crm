@@ -2,13 +2,13 @@
 const nextConfig = {
   images: {
     domains: ['avatars.githubusercontent.com'],
+    unoptimized: false,
   },
   experimental: {
     serverActions: {
       allowedOrigins: ['localhost:3000', '192.168.1.249:3000'],
     },
   },
-  // Add allowed origins for development
   async headers() {
     return [
       {
@@ -30,18 +30,14 @@ const nextConfig = {
       },
     ];
   },
-  // Add allowed development origins
-  allowedDevOrigins: ['localhost:3000', '192.168.1.249:3000'],
-  // Add ESLint configuration
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Add output configuration
   output: 'standalone',
-  // Add build configuration
   poweredByHeader: false,
   reactStrictMode: true,
-  swcMinify: true,
-};
+  compress: true,
+  generateEtags: true,
+}
 
-module.exports = nextConfig; 
+module.exports = nextConfig 
