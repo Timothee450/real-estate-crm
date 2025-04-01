@@ -8,6 +8,8 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { email, password } = body;
+    
+    console.log(`Login attempt for email: ${email}`);
 
     // Find user by email
     const result = await db.query(
@@ -15,19 +17,27 @@ export async function POST(request: Request) {
       [email]
     );
     
+    console.log(`Query result rows: ${result.rows.length}`);
+    
     const user = result.rows[0];
     
     if (!user) {
+      console.log('User not found');
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401 }
       );
     }
 
+    console.log(`User found: ${user.id}, Comparing passwords`);
+    
     // Check password
     const passwordMatches = await bcrypt.compare(password, user.password);
     
+    console.log(`Password match result: ${passwordMatches}`);
+    
     if (!passwordMatches) {
+      console.log('Password does not match');
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401 }
@@ -43,6 +53,8 @@ export async function POST(request: Request) {
       process.env.JWT_SECRET || "default-secret",
       { expiresIn: "7d" }
     );
+    
+    console.log(`JWT created, setting cookies`);
 
     // Set cookie
     const response = NextResponse.json({
@@ -61,6 +73,8 @@ export async function POST(request: Request) {
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: '/',
     });
+    
+    console.log(`Login successful for ${email}`);
 
     return response;
   } catch (error) {
