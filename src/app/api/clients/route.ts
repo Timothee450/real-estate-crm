@@ -1,42 +1,51 @@
-import { prisma } from '@/lib/db'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@/lib/db';
+import { auth } from '@/lib/auth';
 
 export async function GET() {
   try {
-    const clients = await prisma.client.findMany({
-      orderBy: {
-        createdAt: 'desc'
-      }
-    })
-    return NextResponse.json(clients)
+    const session = await auth();
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const clients = await db.query(
+      'SELECT * FROM clients WHERE user_id = $1 ORDER BY created_at DESC',
+      [session.user.id]
+    );
+
+    return NextResponse.json(clients.rows);
   } catch (error) {
+    console.error('Error fetching clients:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch clients' },
+      { error: 'Internal server error' },
       { status: 500 }
-    )
+    );
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    const json = await request.json()
-    const client = await prisma.client.create({
-      data: {
-        name: json.name,
-        email: json.email,
-        phone: json.phone,
-        type: json.type,
-        status: json.status || 'ACTIVE',
-        properties: json.properties,
-        lastContact: new Date(json.lastContact),
-        userId: json.userId // In a real app, this would come from the session
-      }
-    })
-    return NextResponse.json(client)
+    const session = await auth();
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const json = await request.json();
+    const { name, email, phone, notes } = json;
+
+    const client = await db.query(
+      `INSERT INTO clients (name, email, phone, notes, user_id, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5, NOW(), NOW()) RETURNING *`,
+      [name, email, phone, notes, session.user.id]
+    );
+
+    return NextResponse.json(client.rows[0]);
   } catch (error) {
+    console.error('Error creating client:', error);
     return NextResponse.json(
-      { error: 'Failed to create client' },
+      { error: 'Internal server error' },
       { status: 500 }
-    )
+    );
   }
 } 
